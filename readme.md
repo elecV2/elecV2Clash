@@ -8,3 +8,8 @@ UI 有修改。by elecV2
 增加了一个重载 config.yaml 的输入框
 
 # 运行前先配置好 config.yaml
+
+默认 config.yaml 使用 
+
+- 7890 mixed(http/socks) port
+- 9090 web UI port

@@ -5,4 +5,6 @@ WORKDIR /clash
 
 RUN chmod -R 777 /clash
 
-CMD ["/clash/clash", "-d", '.']
+EXPOSE 7890 9090
+
+ENTRYPOINT ["/clash/clash", "-d", '.']
