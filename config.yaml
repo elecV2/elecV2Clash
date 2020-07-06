@@ -1,0 +1,127 @@
+# port of HTTP
+mixed-port: 7890
+# port of SOCKS5
+# socks-port: 7891
+# 
+allow-lan: true
+
+mode: rule
+
+# set log level to stdout (default is info)
+# info / warning / error / debug / silent
+log-level: info
+
+# RESTful API for clash
+external-controller: :9090
+
+# you can put the static web resource (such as clash-dashboard) to a directory, and clash would serve in `${API}/ui`
+# input is a relative path to the configuration directory or an absolute path
+external-ui: yacd
+
+# Secret for RESTful API (Optional)
+# secret: ""
+
+# experimental feature
+experimental:
+  ignore-resolve-fail: true # ignore dns resolve fail, default value is true
+
+# # experimental hosts, support wildcard (e.g. *.clash.dev Even *.foo.*.example.com)
+# # static domain has a higher priority than wildcard domain (foo.example.com > *.example.com)
+hosts:
+  'raw.githubusercontent.com': 151.101.56.133
+
+dns:
+  enable: true # set true to enable dns (default is false)
+  ipv6: false # default is false
+  # listen: 0.0.0.0:53
+  # enhanced-mode: redir-host # or fake-ip
+  # # fake-ip-range: 198.18.0.1/16 # if you don't know what it is, don't change it
+  nameserver:
+    - 8.8.8.8
+    - 1.1.1.1
+    - https://dns.adguard.com/dns-query
+    - 223.5.5.5
+    - 114.114.114.114
+    - 117.50.10.10
+
+proxies:
+  - name: LocalTest
+    type: http
+    server: 127.0.0.1
+    port: 8001
+
+proxy-groups:
+  - name: GOOGLE
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+
+  - name: balance
+    type: load-balance
+    proxies:
+      - DIRECT
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 3000
+
+  - name: available
+    type: fallback
+    proxies:
+      - DIRECT
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 3000
+
+  - name: Proxy
+    type: select
+    proxies:
+      - balance
+      - available
+      - LocalTest
+
+  - name: Final
+    type: select
+    proxies:
+      - DIRECT
+      - Proxy
+
+rule-providers:
+  elecV2P:
+    behavior: "classical"
+    type: http
+    url: "url"
+    interval: 3600
+    path: ./elecV2.yaml
+
+rules:
+## 代理
+- DOMAIN,gist.github.com,Proxy
+
+## 拦截
+- DOMAIN-SUFFIX,bdstatic.com,REJECT
+
+## 直连
+- DOMAIN-SUFFIX,apple.com,DIRECT
+
+# Telegram
+- DOMAIN-SUFFIX,telegra.ph,Proxy
+- DOMAIN-SUFFIX,telegram.org,Proxy
+
+- IP-CIDR,91.108.56.0/22,Proxy
+- IP-CIDR,91.108.4.0/22,Proxy
+- IP-CIDR,91.108.8.0/22,Proxy
+- IP-CIDR,109.239.140.0/24,Proxy
+- IP-CIDR,149.154.160.0/20,Proxy
+- IP-CIDR,149.154.164.0/22,Proxy
+
+# LAN
+- DOMAIN-SUFFIX,local,DIRECT
+- IP-CIDR,127.0.0.0/8,DIRECT
+- IP-CIDR,172.16.0.0/12,DIRECT
+- IP-CIDR,192.168.0.0/16,DIRECT
+- IP-CIDR,10.0.0.0/8,DIRECT
+- IP-CIDR,17.0.0.0/8,DIRECT
+- IP-CIDR,100.64.0.0/10,DIRECT
+
+- GEOIP,CN,DIRECT
+
+- MATCH,Final
