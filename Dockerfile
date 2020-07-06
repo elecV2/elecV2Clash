@@ -7,4 +7,4 @@ RUN chmod -R 777 /clash
 
 EXPOSE 7890 9090
 
-ENTRYPOINT ["/clash/clash", "-d", '.']
+CMD ["./clash", "-d", '.']
