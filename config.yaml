@@ -84,15 +84,16 @@ proxy-groups:
       - DIRECT
       - Proxy
 
-rule-providers:
-  elecV2P:
-    behavior: "classical"
-    type: http
-    url: "url"
-    interval: 3600
-    path: ./elecV2.yaml
+# rule-providers:
+#   elecV2:
+#     behavior: "classical"
+#     type: http
+#     url: "url"
+#     interval: 3600
+#     path: ./elecV2.yaml
 
 rules:
+# RULE-SET,elecV2,Proxy
 ## 代理
 - DOMAIN,gist.github.com,Proxy
 

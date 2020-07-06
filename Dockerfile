@@ -5,4 +5,4 @@ WORKDIR /clash
 
 RUN chmod -R 777 /clash
 
-CMD ["./clash", "-d", '.']
+CMD ["/clash/clash", "-d", '.']
