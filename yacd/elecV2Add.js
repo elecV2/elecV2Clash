@@ -10,9 +10,20 @@ div.style = "position: absolute;top: 2em;right: 2em;background: var(--color-text
 div.addEventListener("click", function () {
   let body = { path: document.querySelector("#path").value || "D:\\Program Files\\fQthings\\clash\\config.yaml" }
   // console.log(body)
+  // fetch("/configs", {method: "put"}).then(res=>{
   fetch("/configs",{method: "put", body: JSON.stringify(body)}).then(res=>{
       console.log("reload done")
       alert(res.status + " - " + res.statusText + " reload done")
     })
 })
 document.body.append(div)
+
+let mini = document.createElement("div")
+mini.innerHTML = "mini"
+mini.style = "position: absolute;top: 4.6em;right: 2em;background: var(--color-text);color: var(--color-background);padding: 8px 16px;font-size: 22px;border-radius: 16px;cursor: pointer;-webkit-app-region: no-drag"
+mini.addEventListener("click", function () {
+  let stat = document.querySelector("#app").style.visibility == "hidden"?"visible":"hidden"
+  document.querySelector("#app").style.visibility = stat
+  document.querySelector("#reload").style.visibility = stat
+})
+document.body.append(mini)
